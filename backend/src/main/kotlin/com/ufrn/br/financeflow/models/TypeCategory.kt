@@ -8,8 +8,8 @@ class TypeCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long = 0
+    var id: Long = 0
 
     @Column(nullable = false)
-    private var name: String = ""
+    var name: String = ""
 }
