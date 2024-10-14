@@ -13,7 +13,7 @@ class FinanceDto {
 
     var description: String = ""
 
-    var type: EnumTypeFinance = EnumTypeFinance.EXPENSE
+    lateinit var type: EnumTypeFinance
 
     var typeCategories: MutableList<TypeCategoryDto> = mutableListOf()
 }
