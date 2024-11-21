@@ -22,6 +22,6 @@ class Finance {
     @Enumerated(EnumType.STRING)
     lateinit var type: EnumTypeFinance
 
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     var typeCategories: MutableList<TypeCategory> = mutableListOf()
 }

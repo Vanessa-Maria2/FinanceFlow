@@ -6,6 +6,12 @@ import jakarta.persistence.*
 @Table(name = "type_category")
 class TypeCategory {
 
+    constructor(name: String) {
+        this.name = name
+    }
+
+    constructor() {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0

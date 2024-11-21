@@ -18,7 +18,4 @@ class Person {
 
     @Column(nullable = false)
     lateinit var password: String
-
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var finances: MutableList<Finance> = mutableListOf()
 }
