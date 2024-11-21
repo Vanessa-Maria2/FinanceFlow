@@ -1,6 +1,7 @@
 package com.ufrn.br.financeflow.mapper
 
 import com.ufrn.br.financeflow.dtos.TypeCategoryDto
+import com.ufrn.br.financeflow.dtos.TypeCategoryResponseDto
 import com.ufrn.br.financeflow.models.TypeCategory
 import org.springframework.stereotype.Component
 
@@ -16,6 +17,13 @@ class TypeCategoryMapper {
 
     fun toDto (typeCategory: TypeCategory): TypeCategoryDto {
         val dto = TypeCategoryDto()
+        dto.id = typeCategory.id
+        dto.name = typeCategory.name
+        return dto
+    }
+
+    fun toResponseDto (typeCategory: TypeCategory): TypeCategoryResponseDto {
+        val dto = TypeCategoryResponseDto()
         dto.id = typeCategory.id
         dto.name = typeCategory.name
         return dto

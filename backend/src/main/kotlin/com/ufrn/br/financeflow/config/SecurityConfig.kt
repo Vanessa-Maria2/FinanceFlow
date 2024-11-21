@@ -14,10 +14,12 @@ class SecurityConfig {
     fun filterChain(http: HttpSecurity): DefaultSecurityFilterChain? {
         http
             .csrf{ csrf -> csrf.disable() }
+            .cors{}
             .authorizeHttpRequests{
             authz ->
             authz
-                .requestMatchers("/finance-record/**").permitAll() // Permite acesso sem autenticação a /finance-record/**
+                .requestMatchers("/finance-record/**").permitAll()
+                .requestMatchers("/type-category/**").permitAll()
                 .anyRequest().authenticated()
         }
 
