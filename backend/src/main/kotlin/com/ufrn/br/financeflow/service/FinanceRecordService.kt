@@ -1,12 +1,15 @@
 package com.ufrn.br.financeflow.service
 
 import com.ufrn.br.financeflow.dtos.FinanceDto
+import com.ufrn.br.financeflow.dtos.FinanceResponseDto
 import com.ufrn.br.financeflow.mapper.FinanceMapper
 import com.ufrn.br.financeflow.models.Finance
 import com.ufrn.br.financeflow.models.TypeCategory
 import com.ufrn.br.financeflow.repository.FinanceRecordRepository
 import com.ufrn.br.financeflow.repository.TypeCategoryRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,6 +23,12 @@ class FinanceRecordService {
 
     @Autowired
     private lateinit var typeCategoryRepository: TypeCategoryRepository
+
+    fun findAll(page: Int, pageSize: Int): Page<FinanceResponseDto> {
+        val pageable = PageRequest.of(page, pageSize)
+        val financePage = financeRecordRepository.findAll(pageable)
+        return financePage.map { financeMapper.toResponseDto(it) }
+    }
 
     fun createRecord(finance: FinanceDto) : Finance {
         validateRecord(finance)
