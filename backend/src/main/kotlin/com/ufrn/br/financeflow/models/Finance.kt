@@ -20,8 +20,8 @@ class Finance {
     var description: String = ""
 
     @Enumerated(EnumType.STRING)
-    var type: EnumTypeFinance = EnumTypeFinance.EXPENSE
+    lateinit var type: EnumTypeFinance
 
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     var typeCategories: MutableList<TypeCategory> = mutableListOf()
 }

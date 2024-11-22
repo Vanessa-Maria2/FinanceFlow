@@ -13,6 +13,7 @@ class FinanceMapper {
         val finance = Finance()
         finance.id = dto.id
         finance.amount = dto.amount
+        finance.type = dto.type
 
         for (t in dto.typeCategories) {
             finance.typeCategories.add(typeCategoryMapper.toEntity(t))
@@ -25,6 +26,7 @@ class FinanceMapper {
         val dto = FinanceDto()
         dto.id = finance.id
         dto.amount = finance.amount
+        dto.type = finance.type
 
         for (t in finance.typeCategories) {
             dto.typeCategories.add(typeCategoryMapper.toDto(t))
