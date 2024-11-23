@@ -35,4 +35,14 @@ class FinanceRecordController {
         val savedFinance = financeRecordService.createRecord(financeDto)
         return ResponseEntity.ok(savedFinance)
     }
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long) : ResponseEntity<Void> {
+        var isDeleted = financeRecordService.delete(id)
+        return if (isDeleted)  {
+            return ResponseEntity.noContent().build()
+        } else {
+            return ResponseEntity.notFound().build()
+        }
+    }
 }

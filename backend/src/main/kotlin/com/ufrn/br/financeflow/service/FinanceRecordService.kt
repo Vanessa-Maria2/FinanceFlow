@@ -57,4 +57,13 @@ class FinanceRecordService {
             throw Exception("O categoria é obrigatório")
         }
     }
+
+    fun delete(id: Long) : Boolean {
+        if (financeRecordRepository.existsById(id)) {
+            financeRecordRepository.deleteById(id)
+            return true
+        } else {
+            return false
+        }
+    }
 }
