@@ -1,87 +1,123 @@
+'use client';
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
-  
-  const invoices = [
-    {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-  ]
-  
-  export function TableRecords() {
-    return (
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
-    )
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { useState, useEffect } from "react";
+import { FinanceType } from "./models/financeType";
+import { ApiResponse } from "./models/apiResponse";
+import { CategoryType } from "./models/categoryType";
+import { Delete02Icon, EditUser02Icon } from "hugeicons-react";
+import { Button } from "@/components/ui/button"
+
+export function TableRecords() {
+  const [finances, setFinances] = useState<FinanceType[]>([]);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
+
+  useEffect(() => {
+    fetchFinances();
+  }, []);
+
+  const fetchFinances = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/finance-record');
+      if (!response.ok) {
+        throw new Error('Error ao buscar as finanças')
+      }
+      const data: ApiResponse<FinanceType> = await response.json();
+
+      const mappedData: FinanceType[] = data.items.map((finance) => ({
+        id: finance.id,
+        type: finance.type,
+        amount: Number(finance.amount),
+        typeCategories: finance.typeCategories.map((category: CategoryType) => ({
+          id: category.id,
+          name: category.name,
+        })),
+        description: finance.description,
+        date: new Date(finance.date)
+      }));
+
+      const total = mappedData.reduce((acc, finance) => acc + finance.amount, 0);
+      setTotalAmount(total);
+      setFinances(mappedData);
+    } catch (error) {
+      console.error('Error: ', error);
+    }
   }
-  
+
+  const deleteFinance = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/finance-record/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao cadastrar o registro');
+      }
+
+      console.log("deletado com sucesso")
+      fetchFinances();
+
+    } catch (error) {
+      console.error('Erro:', error);
+    }
+  }
+
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">Id</TableHead>
+          <TableHead className="w-[100px]">Description</TableHead>
+          <TableHead>Type</TableHead>
+          <TableHead>Date</TableHead>
+          <TableHead>Categories</TableHead>
+          <TableHead>Amount</TableHead>
+          <TableHead className="text-right">Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {finances.map((finance) => (
+          <TableRow key={finance.id}>
+            <TableCell className="font-medium">{finance.id}</TableCell>
+            <TableCell>{finance.description}</TableCell>
+            <TableCell>{finance.type}</TableCell>
+            <TableCell>{finance.date.toLocaleDateString('pt-BR')}</TableCell>
+            <TableCell>{finance.typeCategories.map((category) => category.name).join(', ')}</TableCell>
+            <TableCell>{finance.amount}</TableCell>
+            <TableCell className="text-right">
+              <Button style={{ background: 'transparent' }} onClick={() => deleteFinance(finance.id)}>
+                <Delete02Icon
+                  size={24}
+                  color={"#d0021b"}
+                />
+              </Button>
+              <Button style={{ background: 'transparent' }}>
+                <EditUser02Icon
+                  size={24}
+                  color={"#6bb833"}
+                />
+              </Button>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={6}>Total</TableCell>
+          <TableCell className="text-right">{totalAmount}</TableCell>
+        </TableRow>
+      </TableFooter>
+    </Table>
+  )
+}
