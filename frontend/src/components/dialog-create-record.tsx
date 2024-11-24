@@ -14,11 +14,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectGroup, SelectLabel, SelectValue } from "./ui/select";
+import { CategoryType } from "./models/categoryType";
 
-interface CategoryType {
-  id: string;
-  name: string;
-}
 
 export function DialogCreateRecord() {
   const [value, setValue] = useState("");
