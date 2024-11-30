@@ -16,6 +16,7 @@ class FinanceMapper {
         finance.amount = dto.amount
         finance.type = dto.type
         finance.description = dto.description
+        finance.data = dto.data
 
         for (t in dto.typeCategories) {
             finance.typeCategories.add(typeCategoryMapper.toEntity(t))
@@ -30,6 +31,7 @@ class FinanceMapper {
         dto.amount = finance.amount
         dto.type = finance.type
         dto.description = finance.description
+        dto.data = finance.data
 
         for (t in finance.typeCategories) {
             dto.typeCategories.add(typeCategoryMapper.toDto(t))
@@ -44,6 +46,7 @@ class FinanceMapper {
         dto.amount = finance.amount
         dto.type = finance.type
         dto.description = finance.description
+        dto.data = finance.data
 
         for (t in finance.typeCategories) {
             dto.typeCategories.add(typeCategoryMapper.toDto(t))
