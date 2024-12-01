@@ -1,6 +1,7 @@
 package com.ufrn.br.financeflow.dtos
 
 import com.ufrn.br.financeflow.models.EnumTypeFinance
+import com.ufrn.br.financeflow.models.Person
 import java.util.*
 
 class FinanceDto {
@@ -16,4 +17,6 @@ class FinanceDto {
     lateinit var type: EnumTypeFinance
 
     var typeCategories: MutableList<TypeCategoryDto> = mutableListOf()
+
+    lateinit var person: PersonDto
 }

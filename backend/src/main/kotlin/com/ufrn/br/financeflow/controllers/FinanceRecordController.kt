@@ -30,9 +30,9 @@ class FinanceRecordController {
         return ResponseEntity.ok(response)
     }
 
-    @PostMapping
-    fun create(@RequestBody financeDto: FinanceDto) : ResponseEntity<Finance> {
-        val savedFinance = financeRecordService.createRecord(financeDto)
+    @PostMapping("/{id}")
+    fun create(@RequestBody financeDto: FinanceDto, @PathVariable id: Long) : ResponseEntity<Finance> {
+        val savedFinance = financeRecordService.createRecord(financeDto, id)
         return ResponseEntity.ok(savedFinance)
     }
 
