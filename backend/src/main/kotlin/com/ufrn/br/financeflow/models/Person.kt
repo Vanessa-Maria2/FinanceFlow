@@ -8,7 +8,7 @@ class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0
+    var id: Long = 0
 
     @Column(nullable = false)
     lateinit var name: String
@@ -18,4 +18,7 @@ class Person {
 
     @Column(nullable = false)
     lateinit var password: String
+
+    @OneToMany(mappedBy = "person", cascade = [CascadeType.PERSIST, CascadeType.MERGE], orphanRemoval = true)
+    var finances: MutableList<Finance> = mutableListOf()
 }

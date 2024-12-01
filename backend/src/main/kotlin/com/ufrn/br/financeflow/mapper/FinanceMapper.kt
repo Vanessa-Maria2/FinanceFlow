@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component
 class FinanceMapper {
 
     val typeCategoryMapper  = TypeCategoryMapper()
+    val personMapper = PersonMapper()
 
     fun toEntity (dto: FinanceDto): Finance {
         val finance = Finance()
@@ -17,6 +18,7 @@ class FinanceMapper {
         finance.type = dto.type
         finance.description = dto.description
         finance.data = dto.data
+        finance.person = personMapper.toPerson(dto.person)
 
         for (t in dto.typeCategories) {
             finance.typeCategories.add(typeCategoryMapper.toEntity(t))
@@ -32,6 +34,7 @@ class FinanceMapper {
         dto.type = finance.type
         dto.description = finance.description
         dto.data = finance.data
+        dto.person = personMapper.toPersonDto(finance.person)
 
         for (t in finance.typeCategories) {
             dto.typeCategories.add(typeCategoryMapper.toDto(t))

@@ -3,9 +3,11 @@ package com.ufrn.br.financeflow.service
 import com.ufrn.br.financeflow.dtos.FinanceDto
 import com.ufrn.br.financeflow.dtos.FinanceResponseDto
 import com.ufrn.br.financeflow.mapper.FinanceMapper
+import com.ufrn.br.financeflow.mapper.PersonMapper
 import com.ufrn.br.financeflow.models.Finance
 import com.ufrn.br.financeflow.models.TypeCategory
 import com.ufrn.br.financeflow.repository.FinanceRecordRepository
+import com.ufrn.br.financeflow.repository.PersonRepository
 import com.ufrn.br.financeflow.repository.TypeCategoryRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
@@ -24,13 +26,25 @@ class FinanceRecordService {
     @Autowired
     private lateinit var typeCategoryRepository: TypeCategoryRepository
 
+    @Autowired
+    private lateinit var personMapper: PersonMapper
+
+    @Autowired
+    private lateinit var personRepository: PersonRepository
+
     fun findAll(page: Int, pageSize: Int): Page<FinanceResponseDto> {
         val pageable = PageRequest.of(page, pageSize)
         val financePage = financeRecordRepository.findAll(pageable)
         return financePage.map { financeMapper.toResponseDto(it) }
     }
 
-    fun createRecord(finance: FinanceDto) : Finance {
+    fun createRecord(finance: FinanceDto, id: Long) : Finance {
+        val person = personRepository.findById(id).orElseThrow {
+            Exception("Person with ID $id not found")
+        }
+
+        finance.person = personMapper.toPersonDto(person)
+
         validateRecord(finance)
 
         val financeEntity = financeMapper.toEntity(finance)

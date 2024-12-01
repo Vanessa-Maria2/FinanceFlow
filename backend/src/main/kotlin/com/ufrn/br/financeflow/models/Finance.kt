@@ -24,4 +24,8 @@ class Finance {
 
     @ManyToMany(fetch = FetchType.LAZY)
     var typeCategories: MutableList<TypeCategory> = mutableListOf()
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "person_id", nullable = false)
+    lateinit var person: Person
 }
