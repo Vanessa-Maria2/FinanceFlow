@@ -15,22 +15,14 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
-class FinanceRecordService {
+class FinanceRecordService(
+    private var financeRecordRepository: FinanceRecordRepository,
+    private var typeCategoryRepository: TypeCategoryRepository,
+    private var personRepository: PersonRepository,
+    private val financeMapper: FinanceMapper,
+    private val personMapper: PersonMapper,
+) {
 
-    @Autowired
-    private lateinit var financeRecordRepository: FinanceRecordRepository
-
-    @Autowired
-    private lateinit var financeMapper: FinanceMapper
-
-    @Autowired
-    private lateinit var typeCategoryRepository: TypeCategoryRepository
-
-    @Autowired
-    private lateinit var personMapper: PersonMapper
-
-    @Autowired
-    private lateinit var personRepository: PersonRepository
 
     fun findAll(page: Int, pageSize: Int): Page<FinanceResponseDto> {
         val pageable = PageRequest.of(page, pageSize)
@@ -43,7 +35,7 @@ class FinanceRecordService {
             Exception("Person with ID $id not found")
         }
 
-        finance.person = personMapper.toPersonDto(person)
+        finance.person = personMapper.mapToDto(person)
 
         validateRecord(finance)
 

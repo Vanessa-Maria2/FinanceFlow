@@ -1,17 +1,23 @@
 package com.ufrn.br.financeflow.dtos
 
-import com.ufrn.br.financeflow.models.Finance
-import jakarta.persistence.*
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Pattern
 
 class PersonDto {
 
     var id: Long = 0
 
-    lateinit var name: String
+    @NotBlank(message = "O campo nome é obrigatório")
+    var name: String? = null
 
-    lateinit var email: String
+    @NotBlank(message = "O campo email é obrigatório")
+    @Email
+    var email: String? = null
 
-    lateinit var password: String
+    @NotBlank(message = "O campo password é obrigatório")
+    @Pattern(regexp = "^[a-zA-Z0-9_]{5,8}$", message = "A senha deve ter entre 5 e 8 caracteres e conter apenas letras, números e _")
+    var password: String? = null
 
-    var finances: MutableList<Finance> = mutableListOf()
+    var finances: MutableList<FinanceDto> = mutableListOf()
 }

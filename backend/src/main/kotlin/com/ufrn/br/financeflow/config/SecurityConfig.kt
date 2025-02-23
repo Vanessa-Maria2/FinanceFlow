@@ -20,6 +20,7 @@ class SecurityConfig {
             authz
                 .requestMatchers("/finance-record/**").permitAll()
                 .requestMatchers("/type-category/**").permitAll()
+                .requestMatchers("/person/**").permitAll()
                 .anyRequest().authenticated()
         }
 

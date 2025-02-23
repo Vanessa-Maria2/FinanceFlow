@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/finance-record")
-class FinanceRecordController {
-
-    @Autowired
-    private lateinit var financeRecordService: FinanceRecordService
+class FinanceRecordController(
+    private var financeRecordService: FinanceRecordService
+) {
 
     @GetMapping
     fun findAll(@RequestParam(value = "page", defaultValue = "0") page: Int,
