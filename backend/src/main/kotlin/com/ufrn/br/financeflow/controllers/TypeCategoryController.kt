@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/type-category")
-class TypeCategoryController {
-
-    @Autowired
-    private lateinit var typeCategoryService: TypeCategoryService
+class TypeCategoryController(
+    private var typeCategoryService: TypeCategoryService
+) {
 
     @GetMapping
     fun findAll() : ResponseEntity<Collection<TypeCategoryResponseDto>> {

@@ -1,27 +1,16 @@
 package com.ufrn.br.financeflow.mapper
 
 import com.ufrn.br.financeflow.dtos.PersonDto
+import com.ufrn.br.financeflow.dtos.PersonResponseDto
 import com.ufrn.br.financeflow.models.Person
-import org.springframework.stereotype.Component
+import org.mapstruct.Mapper
 
-@Component
-class PersonMapper {
+@Mapper(componentModel = "spring")
+interface PersonMapper {
 
-    fun toPersonDto(person: Person): PersonDto {
-        val personDto = PersonDto()
-        personDto.id = person.id
-        personDto.name = person.name
-        personDto.email = person.email
-        personDto.password = person.password
-        return personDto
-    }
+    fun mapToDto(person: Person): PersonDto
 
-    fun toPerson(personDto: PersonDto): Person {
-        val person = Person()
-        person.id = personDto.id
-        person.name = personDto.name
-        person.email = personDto.email
-        person.password = personDto.password
-        return person
-    }
+    fun mapToEntity(personDto: PersonDto): Person
+
+    fun mapToResponseDto(person: Person): PersonResponseDto
 }
