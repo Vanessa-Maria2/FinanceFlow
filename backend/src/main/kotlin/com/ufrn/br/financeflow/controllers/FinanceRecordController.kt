@@ -3,9 +3,7 @@ package com.ufrn.br.financeflow.controllers
 import com.ufrn.br.financeflow.dtos.FinanceDto
 import com.ufrn.br.financeflow.dtos.FinanceResponseDto
 import com.ufrn.br.financeflow.dtos.ResponseCollectionInfo
-import com.ufrn.br.financeflow.models.Finance
 import com.ufrn.br.financeflow.service.FinanceRecordService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -30,9 +28,15 @@ class FinanceRecordController(
     }
 
     @PostMapping("/{id}")
-    fun create(@RequestBody financeDto: FinanceDto, @PathVariable id: Long) : ResponseEntity<Finance> {
+    fun create(@RequestBody financeDto: FinanceDto, @PathVariable id: Long) : ResponseEntity<FinanceResponseDto> {
         val savedFinance = financeRecordService.createRecord(financeDto, id)
         return ResponseEntity.ok(savedFinance)
+    }
+
+    @PutMapping("/{id}")
+    fun update(@RequestBody financeDto: FinanceDto, @PathVariable id: Long) : ResponseEntity<FinanceResponseDto> {
+        val updatedFinance = financeRecordService.updateRecord(financeDto, id);
+        return ResponseEntity.ok(updatedFinance)
     }
 
     @DeleteMapping("/{id}")
