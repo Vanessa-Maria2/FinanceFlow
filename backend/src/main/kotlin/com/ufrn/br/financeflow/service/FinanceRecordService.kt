@@ -4,12 +4,12 @@ import com.ufrn.br.financeflow.dtos.FinanceDto
 import com.ufrn.br.financeflow.dtos.FinanceResponseDto
 import com.ufrn.br.financeflow.mapper.FinanceMapper
 import com.ufrn.br.financeflow.mapper.PersonMapper
+import com.ufrn.br.financeflow.mapper.TypeCategoryMapper
 import com.ufrn.br.financeflow.models.Finance
 import com.ufrn.br.financeflow.models.TypeCategory
 import com.ufrn.br.financeflow.repository.FinanceRecordRepository
 import com.ufrn.br.financeflow.repository.PersonRepository
 import com.ufrn.br.financeflow.repository.TypeCategoryRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -21,6 +21,7 @@ class FinanceRecordService(
     private var personRepository: PersonRepository,
     private val financeMapper: FinanceMapper,
     private val personMapper: PersonMapper,
+    private val typeCategoryMapper: TypeCategoryMapper,
 ) {
 
 
@@ -30,7 +31,7 @@ class FinanceRecordService(
         return financePage.map { financeMapper.toResponseDto(it) }
     }
 
-    fun createRecord(finance: FinanceDto, id: Long) : Finance {
+    fun createRecord(finance: FinanceDto, id: Long) : FinanceResponseDto {
         val person = personRepository.findById(id).orElseThrow {
             Exception("Person with ID $id not found")
         }
@@ -51,7 +52,31 @@ class FinanceRecordService(
             addAll(categoriesToAssociate)
         }
 
-        return financeRecordRepository.save(financeEntity)
+        return financeMapper.toResponseDto(financeRecordRepository.save(financeEntity))
+    }
+
+    fun updateRecord(financeDto: FinanceDto, id: Long): FinanceResponseDto {
+        val existingFinance = financeRecordRepository.findById(id).orElseThrow {
+            Exception("Finance record with ID $id not found")
+        }
+
+        existingFinance.apply {
+            amount = financeDto.amount
+            description = financeDto.description
+            type = financeDto.type
+        }
+
+        val updatedCategories = financeDto.typeCategories.map { categoryDto ->
+            typeCategoryRepository.findTypeCategoryByName(categoryDto.name)
+                ?: typeCategoryRepository.save(TypeCategory(categoryDto.name))
+        }
+
+        existingFinance.typeCategories.apply {
+            clear()
+            addAll(updatedCategories)
+        }
+
+        return financeMapper.toResponseDto(financeRecordRepository.save(existingFinance))
     }
 
     fun validateRecord(finance: FinanceDto) {
