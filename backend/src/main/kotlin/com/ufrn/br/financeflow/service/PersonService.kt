@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service
 @Service
 class PersonService (
     private val personMapper: PersonMapper,
-    private var personRepository: PersonRepository
+    private var personRepository: PersonRepository,
+    private val passwordEncoder: BCryptPasswordEncoder
 ){
 
 
@@ -22,7 +23,7 @@ class PersonService (
     }
 
     fun save(personDto: PersonDto): PersonResponseDto {
-        val encodedPassword = BCryptPasswordEncoder(16).encode(personDto.password)
+        val encodedPassword = passwordEncoder.encode(personDto.password)
 
         val person = personMapper.mapToEntity(personDto).apply {
             password = encodedPassword

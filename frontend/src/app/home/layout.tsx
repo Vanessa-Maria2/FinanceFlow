@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
+import { Sidebar } from "@/components/root-sidebar-layout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,9 +24,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="h-screen flex flex-col items-center justify-center">
-            <div className="h-full max-w-[1800px]">
-              <Toaster />
+          <main className="h-screen flex flex-col items-center py-[24px]">
+            <div className="h-full w-full max-w-[1800px] grid grid-cols-[200px_auto] gap-5">
+              <Sidebar />
               {children}
             </div>
           </main>
