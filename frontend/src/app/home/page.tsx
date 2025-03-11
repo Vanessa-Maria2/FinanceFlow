@@ -3,16 +3,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { MoneyReceiveSquareIcon, MoneySendSquareIcon, AddCircleHalfDotIcon } from "hugeicons-react"
+import { MoneyReceiveSquareIcon, MoneySendSquareIcon } from "hugeicons-react"
 import { DialogCreateRecord } from "@/components/dialog-create-record"
 import { TableRecords } from "@/components/table-records"
+import { auth } from '@/auth'
 
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
   return (
     <div>
       <div className="flex justify-between mb-8">
         <div className="flex gap-3">
+          <div>
+            <p>Bem-vindo, {session?.user?.name}!</p>
+          </div>
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -34,8 +40,8 @@ export default function Home() {
         <div>
           <DialogCreateRecord />
         </div>
-      </div>
 
+      </div>
 
       <TableRecords />
 

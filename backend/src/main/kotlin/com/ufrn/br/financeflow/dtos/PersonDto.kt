@@ -12,7 +12,7 @@ class PersonDto {
     var name: String? = null
 
     @NotBlank(message = "O campo email é obrigatório")
-    @Email
+    @Email(message = "O campo email deve ser válido")
     var email: String? = null
 
     @NotBlank(message = "O campo password é obrigatório")
