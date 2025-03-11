@@ -27,6 +27,7 @@ class SecurityConfig {
                 .requestMatchers("/finance-record/**").permitAll()
                 .requestMatchers("/type-category/**").permitAll()
                 .requestMatchers("/person/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated()
         }
 

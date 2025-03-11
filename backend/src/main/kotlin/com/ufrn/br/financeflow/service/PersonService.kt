@@ -5,7 +5,6 @@ import com.ufrn.br.financeflow.dtos.PersonResponseDto
 import com.ufrn.br.financeflow.mapper.PersonMapper
 import com.ufrn.br.financeflow.models.Person
 import com.ufrn.br.financeflow.repository.PersonRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -15,8 +14,6 @@ class PersonService (
     private var personRepository: PersonRepository,
     private val passwordEncoder: BCryptPasswordEncoder
 ){
-
-
 
     fun findById(id: Long): Person{
         return personRepository.findById(id).get()
@@ -32,5 +29,10 @@ class PersonService (
         val savedPerson = personRepository.save(person)
 
         return personMapper.mapToResponseDto(savedPerson)
+    }
+
+    fun findByEmail(email: String): PersonDto? {
+        var person = personRepository.findByEmail(email)
+        return person?.let { personMapper.mapToDto(it) }
     }
 }

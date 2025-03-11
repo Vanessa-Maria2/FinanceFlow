@@ -5,7 +5,6 @@ import com.ufrn.br.financeflow.dtos.PersonResponseDto
 import com.ufrn.br.financeflow.models.Person
 import com.ufrn.br.financeflow.service.PersonService
 import jakarta.validation.Valid
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
